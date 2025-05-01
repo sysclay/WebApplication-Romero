@@ -9,11 +9,40 @@
 - Creamos la base de datos `wayuser` desde SQL SERVER
 
 ## Configuración
-- Paquetes instalados desde Nuget. Instalar cada paquete.
-- Microsoft.EntityFrameworkCore.SqlServer
-- Microsoft.EntityFrameworkCore.Tools
-- Swashbuckle.AspNetCore.Swagger
-- Microsoft.VisualStudio.Web.CodeGeneration.Design
+- Paquetes instalados desde Nuget. Instalar cada paquete **uno por uno**.
+### 1. Microsoft.EntityFrameworkCore.SqlServer
+- **Visual Studio:**
+  - Haz clic derecho en el proyecto > `Administrar paquetes NuGet`
+  - Busca `Microsoft.EntityFrameworkCore.SqlServer` e instálalo
+
+- **Línea de comandos:**
+  ```bash
+  dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+  ```
+### 2. Microsoft.EntityFrameworkCore.Tools
+ **Visual Studio:**
+ - Busca `Microsoft.EntityFrameworkCore.Tools` e instálalo
+ - 
+- **Línea de comandos:**
+  ```bash
+  dotnet add package Microsoft.EntityFrameworkCore.Tools
+  ```
+### 3. Swashbuckle.AspNetCore.Swagger
+ **Visual Studio:**
+ - Busca `Swashbuckle.AspNetCore.Swagger` e instálalo
+ - 
+- **Línea de comandos:**
+  ```bash
+  dotnet add package Swashbuckle.AspNetCore.Swagger
+  ```
+### 4. Microsoft.VisualStudio.Web.CodeGeneration.Design
+ **Visual Studio:**
+ - Busca `Microsoft.VisualStudio.Web.CodeGeneration.Design` e instálalo
+ - 
+- **Línea de comandos:**
+  ```bash
+  dotnet add Microsoft.VisualStudio.Web.CodeGeneration.Design
+  ```
 
 - Para ejecutar el proyecto de manera local desde su PC cambiar en el archivo "appsettings.json" por la dirección de su servidor de SqlServer 
 
