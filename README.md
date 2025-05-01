@@ -10,10 +10,10 @@
 
 ## Configuración
 - Paquetes instalados desde Nuget. Instalar cada paquete.
-1 Microsoft.EntityFrameworkCore.SqlServer
-2 Microsoft.EntityFrameworkCore.Tools
-3 Swashbuckle.AspNetCore.Swagger
-4 Microsoft.VisualStudio.Web.CodeGeneration.Design
+- Microsoft.EntityFrameworkCore.SqlServer
+- Microsoft.EntityFrameworkCore.Tools
+- Swashbuckle.AspNetCore.Swagger
+- Microsoft.VisualStudio.Web.CodeGeneration.Design
 
 - Para ejecutar el proyecto de manera local desde su PC cambiar en el archivo "appsettings.json" por la dirección de su servidor de SqlServer 
 
