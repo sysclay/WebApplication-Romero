@@ -1,0 +1,70 @@
+﻿@model WebApplication_Romero.Models.User
+
+
+<h2>Crear Nuevo Usuario</h2>
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" class="form-control" value="@Model?.nombre" />
+    </div>
+    @if (ViewData.ModelState["nombre"]?.Errors.Count > 0)
+    { 
+        <span class="text-danger">@ViewData.ModelState["nombre"]?.Errors[0].ErrorMessage</span> 
+    }
+    <div class="form-group">
+        <label for="correo">Correo</label>
+        <input type="email" id="correo" name="correo" class="form-control" value="@Model?.correo" />
+    </div>
+    @if (ViewData.ModelState["correo"]?.Errors.Count > 0)
+    {
+        <span class="text-danger">@ViewData.ModelState["correo"]?.Errors[0].ErrorMessage</span>
+    }
+    <div class="form-group">
+        <label for="telefono">Teléfono</label>
+        <input type="text" id="telefono" name="telefono" class="form-control" value="@Model?.telefono" />
+    </div>
+    @if (ViewData.ModelState["telefono"]?.Errors.Count > 0)
+    {
+        <span class="text-danger">@ViewData.ModelState["telefono"]?.Errors[0].ErrorMessage</span>
+    }
+    <div class="form-group">
+        <label for="nombre_company">Nombre company</label>
+        <input type="text" id="nombre_company" name="nombre_company" class="form-control" value="@Model?.nombre_company" />
+    </div>
+    @if (ViewData.ModelState["nombre_company"]?.Errors.Count > 0)
+    {
+        <span class="text-danger">@ViewData.ModelState["nombre_company"]?.Errors[0].ErrorMessage</span>
+    }
+    <div class="form-group">
+        <label for="calle">Calle</label>
+        <input type="text" id="calle" name="calle" class="form-control" value="@Model?.calle" />
+    </div>
+    @if (ViewData.ModelState["calle"]?.Errors.Count > 0)
+    {
+        <span class="text-danger">@ViewData.ModelState["calle"]?.Errors[0].ErrorMessage</span>
+    }
+
+    <div class="form-group">
+        <label for="latitud">Latitud</label>
+        <input type="text" id="latitud" name="latitud" class="form-control" value="@Model?.latitud" />
+    </div>
+    @if (ViewData.ModelState["latitud"]?.Errors.Count > 0)
+    {
+        <span class="text-danger">@ViewData.ModelState["latitud"]?.Errors[0].ErrorMessage</span>
+    }
+
+    <div class="form-group">
+        <label for="longitud">Latitud</label>
+        <input type="text" id="longitud" name="longitud" class="form-control" value="@Model?.longitud" />
+    </div>
+    @if (ViewData.ModelState["longitud"]?.Errors.Count > 0)
+    {
+        <span class="text-danger">@ViewData.ModelState["longitud"]?.Errors[0].ErrorMessage</span>
+    }
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+
+</form>
+

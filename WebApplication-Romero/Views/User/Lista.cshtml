@@ -1,0 +1,228 @@
+﻿<h2 class="mb-4">Usuarios</h2>
+
+<div class="">
+    <p class="">
+        Guardar los datos de la api rest a la base de datos, solo los usuarios con los correos no registrados. <a href="https://jsonplaceholder.typicode.com/users" target="_blank">https://jsonplaceholder.typicode.com/users</a>
+        </p>
+    <a id="importBtn" class="btn btn-success">Guardar Datos</a>
+</div>  
+
+
+<h4 class="mb-3">Listado de usuarios</h4>
+<a href="/User/Create" class="btn btn-primary btn-sm mx-2">Nuevo Usuario</a>
+<div class="table-responsive">
+    <table id="ordersTable" class="table table-striped table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Item</th>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Telefono</th>
+                <th>Correo</th>
+                <th>Compañia</th>
+                <th>Calle</th>
+                <th>Latitud</th>
+                <th>Longitud</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td></td>
+                    <td>@item.UserId</td>
+                    <td>@item.nombre</td>
+                    <td>@item.telefono</td>
+                    <td>@item.correo</td>
+                    <td>@item.nombre_company</td>
+                    <td>@item.calle</td>
+                    <td>@item.latitud</td>
+                    <td>@item.longitud</td>
+                    <td>
+                        <span class="d-inline-flex gap-2">
+                            <a href="/User/Edit/@item.UserId" class="btn btn-primary btn-sm mx-2"><i class="bi bi-pencil"></i></a>
+                            <a data-id="@item.UserId" class="btn btn-danger btn-sm mx-2 btn-eliminar"><i class="bi bi-trash-fill"></i></a>
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+<!-- Toast Notificación -->
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="toastMensaje" class="toast align-items-center text-white bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+        </div>
+    </div>
+</div>
+
+<!-- Inicializar DataTables -->
+@section Scripts {
+    <script>
+        function mostrarToast(mensaje, tipo = "bg-primary") {
+            const toastBody = document.querySelector("#toastMensaje .toast-body");
+            const toastElement = document.getElementById("toastMensaje");
+
+            toastBody.textContent = mensaje; // Insertar mensaje dinámicamente
+            toastElement.classList.remove("bg-primary", "bg-success", "bg-danger"); // Limpiar clases previas
+            toastElement.classList.add(tipo); // Aplicar color según el tipo de mensaje
+
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+        }
+
+        document.getElementById("importBtn").addEventListener("click", async () => {
+            const response = await fetch("/User/Import", {
+                method: "POST"
+            });
+            const responseData = await response.json();
+            if (response.ok) {
+                if (responseData.message === "Usuarios importados correctamente.") {
+                    mostrarToast(responseData.message, "bg-success");
+                    actualizarListaUsuarios();
+                    return;
+                }
+                mostrarToast(responseData.message, "bg-danger");
+                return;
+            } else {
+                const errorData = await response.json();
+                alert(`Error al importar usuarios: ${errorData.message || "Error desconocido"}`);
+            }
+        });
+
+        let tabla;
+        // Función para actualizar la tabla sin recargar la página
+        async function actualizarListaUsuarios() {
+            try {
+                const response = await fetch("/User/ListaJson", {
+                    headers: {
+                        "Cache-Control": "no-cache"
+                    }
+                }); // Llama al nuevo endpoint
+                const result = await response.json();
+
+                if (!result.success) {
+                    console.log(result.message);
+                    return;
+                }
+
+                const tbody = document.querySelector("#ordersTable tbody");
+                tbody.innerHTML = "";
+                const currentPage = tabla ? tabla.page() : 0;
+                // Destruir tabla previa si existe
+                if (tabla) {
+                    tabla.clear().destroy();
+                }
+
+                // Crear nuevamente la tabla
+                tabla = $('#ordersTable').DataTable({
+                    paging: true,
+                    searching: false,
+                    info: true,
+                    lengthChange: false,
+                    pageLength: 10,
+                    order: [[0, 'asc']],
+                    columns: [
+                        { title: "Item" },
+                        { title: "Id" },
+                        { title: "Nombre" },
+                        { title: "Teléfono" },
+                        { title: "Correo" },
+                        { title: "Compañía" },
+                        { title: "Calle" },
+                        { title: "Latitud" },
+                        { title: "Longitud" },
+                        { title: "Acciones" }
+                    ],
+                    drawCallback: function () {
+                        let index = this.api().page.info().start + 1;
+                        this.api().rows({ page: 'current' }).every(function () {
+                            $(this.node()).find("td:first").text(index++);
+                        });
+                        asignarEventosEliminar();
+                    }
+                });
+                // Agregar las filas y redibujar
+                tabla.rows.add(result.data.map((user, index) => [
+                    "", // Índice dinámico
+                    user.userId,
+                    user.nombre,
+                    user.telefono,
+                    user.correo,
+                    user.nombre_company,
+                    user.calle,
+                    user.latitud,
+                    user.longitud,
+                    `<span class="d-inline-flex gap-2">
+                          <a href="/User/Edit/${user.userId}" class="btn btn-primary btn-sm mx-2">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a data-id="${user.userId}" class="btn btn-danger btn-sm mx-2 btn-eliminar">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
+                     </span>`
+                ])).draw();
+                tabla.page(currentPage).draw(false);
+            } catch (ex) {
+                const errorData = await response.json();
+            }
+        }
+
+        function asignarEventosEliminar() {
+            document.querySelectorAll(".btn-eliminar").forEach(button => {
+                button.removeEventListener("click", eliminarUsuario);
+                button.addEventListener("click", eliminarUsuario);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            tabla = $('#ordersTable').DataTable({
+                "paging": true,
+                "searching": false,
+                "info": true,
+                "lengthChange": false,
+                "language": { url: "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json" },
+                "drawCallback": function () {
+                    let index = this.api().page.info().start + 1;
+                    this.api().rows({ page: 'current' }).every(function () {
+                        const row = this.node();
+                        $(row).find('td:first').text(index);
+                        index++;
+                    });
+                }
+            });
+            asignarEventosEliminar();
+        });
+
+        async function eliminarUsuario(event) {
+            event.preventDefault();
+            const btn = event.currentTarget;
+            const userId = btn.dataset.id;
+
+            const response = await fetch(`/User/Eliminar/${userId}`, { method: "POST" });
+            const result = await response.json();
+
+            if (response.ok) {
+                mostrarToast(result.message, "bg-success");
+                const row = btn.closest('tr');
+                const rowInstance = tabla.row(row);
+                console.log('Fila seleccionada:', rowInstance.index());
+                rowInstance.remove().draw(false);
+                return;
+            } else {
+                mostrarToast(result.message, "bg-danger");
+            }       
+        }
+
+        window.addEventListener("pageshow", function (event) {
+            actualizarListaUsuarios();
+        });
+        
+    </script>
+}
