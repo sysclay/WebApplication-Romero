@@ -8,8 +8,7 @@
 ## Base de datos 
 - Creamos la base de datos `wayuser` desde SQL SERVER
 
-## Configuración
-- Paquetes instalados desde Nuget. Instalar cada paquete **uno por uno**.
+## Instalar paquetes desde Nuget
 ### 1. Microsoft.EntityFrameworkCore.SqlServer
 - **Visual Studio:**
   - Haz clic derecho en el proyecto > `Administrar paquetes NuGet`
@@ -43,7 +42,7 @@
   ```bash
   dotnet add Microsoft.VisualStudio.Web.CodeGeneration.Design
   ```
-
+## Configuración y Connexion 
 - Para ejecutar el proyecto de manera local desde su PC cambiar en el archivo "appsettings.json" por la dirección de su servidor de SqlServer 
 
 ```json
@@ -53,21 +52,17 @@
   }
 }
 ```
-- Para crear la tabla Users desde el models, en Visual Studio entra en "Herramientas" luego "Administrador de Paquetes NuGet" luego  "Consola del Administrador de Paquetes", una ves este en la Consola del Administrador de Paquetes.
+- Para crear la tabla Users desde el models, en Visual Studio entra en "Herramientas" > "Administrador de Paquetes NuGet" > "Consola del Administrador de Paquetes", una ves este en la Consola del Administrador de Paquetes.
 - Copiar estos 2 comandos para hacer la migracion a la base de datos 'wayuser'.
-```json
-{
-	Add-Migration InitialCreate
-}
+```bash
+Add-Migration InitialCreate
 ```
-```json
-{
-	Update-Database
-}
+```bash
+Update-Database
 ```
 - Ejecutado esos comando cada uno a la ves, listo tendra la tabla users en la BD 'wayuser'
 - Opcional :: Si no puede crear la tabla de esa manera, ejecute el script desde Sql Server y ya tendra la tabla creada.
-# SCRIPT SQL
+  
 ```sql
 /********* CREAMOS TABLA [Users]*****/
 CREATE TABLE [dbo].[Users](
